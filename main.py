@@ -66,9 +66,10 @@ def main():
     return render_template("main.html")
 
 
-@app.route('/<img>', methods=['GET', 'POST'])
-def index(img):
-    img = img.replace('-', '/')
+@app.route('/img/', methods=['GET', 'POST'])
+def index():
+    content = request.json
+    img = content['image_base64']
     result = convert(img)
     print(result)
     return {"food": result}

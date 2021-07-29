@@ -49,16 +49,14 @@ def convert(base64):
     print(output.data.concepts[0].name)
     return output.data.concepts[0].name
 
-convert(filename)
 
 app = Flask(__name__)
 
 
-
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    result = convert(request.json['base64']);
-    return ({"food": result})
+@app.route('/<img>', methods=['GET', 'POST'])
+def index(img):
+    result = convert(img)
+    return {"food": result}
 
 
 if __name__ == '__main__':

@@ -53,17 +53,12 @@ convert(filename)
 
 app = Flask(__name__)
 
-@app.route('/', methods=[ 'POST'])
+
+
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    result = convert(filename);
-    return ({"base64": result})
-
-
-
-# @app.route('/', methods=['GET', 'POST'])
-# def index():
-#     result = convert(request.json['base64']);
-#     return ({"base64": result})
+    result = convert(request.json['base64']);
+    return ({"food": result})
 
 
 if __name__ == '__main__':

@@ -30,7 +30,7 @@ def convert(my_string):
     with open(filename, "rb") as f:
         file_bytes = f.read()
 
-    print(file_bytes)
+    # print(file_bytes)
     print(1)
     metadata = (('authorization', 'Key 69afe5ce2e5246f8b733fd3213dd7d33'),)
     post_model_outputs_response = stub.PostModelOutputs(
@@ -71,7 +71,6 @@ def index():
     content = request.json
     img = content['image_base64']
     result = convert(img)
-    print(result)
     return {"food": result}
 
 

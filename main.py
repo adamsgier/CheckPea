@@ -15,8 +15,8 @@ import base64
 
 
 
-with open("C:/Users/adams/Downloads/Eq_it-na_pizza-margherita_sep2005_sml.jpg", "rb") as img_file:
-    my_string = base64.b64encode(img_file.read())
+# with open("C:/Users/adams/Downloads/Eq_it-na_pizza-margherita_sep2005_sml.jpg", "rb") as img_file:
+#     my_string = base64.b64encode(img_file.read())
 
 filename = 'pizza.jpg'  # I assume you have a way of picking unique filenames
 

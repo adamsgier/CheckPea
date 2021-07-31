@@ -24,7 +24,7 @@ filename = 'pizza.jpg'  # I assume you have a way of picking unique filenames
 
 def convert(my_string):
     imgdata = base64.b64decode(my_string)
-    print(imgdata)
+    # print(imgdata)
     with open(filename, 'wb') as f:
         f.write(imgdata)
     with open(filename, "rb") as f:

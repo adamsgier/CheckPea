@@ -55,7 +55,16 @@ def convert(my_string):
     # Since we have one input, one output will exist here.
     output = post_model_outputs_response.outputs[0]
     print(output.data.concepts[0].name)
-    return output.data.concepts[0].name
+    y = []
+    i = 0
+    for x in output.data.concepts:
+        if i < 10:
+            y.append(x.name)
+            i += 1
+        else:
+            break
+
+    return y
 
 
 app = Flask(__name__)

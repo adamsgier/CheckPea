@@ -35,7 +35,7 @@ def convert(my_string):
     metadata = (('authorization', 'Key 69afe5ce2e5246f8b733fd3213dd7d33'),)
     post_model_outputs_response = stub.PostModelOutputs(
         service_pb2.PostModelOutputsRequest(
-            model_id="9504135848be0dd2c39bdab0002f78e9",
+            model_id="bd367be194cf45149e75f01d59f77ba7",
             inputs=[
                 resources_pb2.Input(
                     data=resources_pb2.Data(
@@ -56,12 +56,11 @@ def convert(my_string):
     output = post_model_outputs_response.outputs[0]
     print(output.data.concepts[0])
     y = []
+    z ={}
     for x in output.data.concepts:
-        if x.value >= 0.1:
-            y.append(x.name)
-        else:
-            break
-    return y
+        z[x.name] = x.value
+
+    return z
 
 
 app = Flask(__name__)

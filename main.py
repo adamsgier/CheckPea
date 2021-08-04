@@ -11,7 +11,7 @@ from clarifai_grpc.grpc.api.status import status_code_pb2
 
 
 import base64
-
+from flask_cors import CORS
 
 
 
@@ -64,7 +64,7 @@ def convert(my_string):
 
 
 app = Flask(__name__)
-
+CORS(app)
 
 @app.route('/')
 def main():
@@ -72,6 +72,7 @@ def main():
 
 
 @app.route('/img/', methods=['GET', 'POST'])
+
 def index():
     content = request.json
     img = content['image_base64']

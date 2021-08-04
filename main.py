@@ -951,13 +951,18 @@ def main():
 
 
 @app.route('/img/', methods=['GET', 'POST'])
-
 def index():
     content = request.json
     img = content['image_base64']
     result = convert(img)
-    return bubbles_backend(result)
+    return result
 
+@app.route('/imgfull/', methods=['GET', 'POST'])
+def imgFull():
+    content = request.json
+    img = content['image_base64']
+    result = convert(img)
+    return bubbles_backend(result)
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -958,7 +958,7 @@ def index():
     return result
 
 @app.route('/imgfull/', methods=['GET', 'POST'])
-def imgFull():
+def imgfull():
     content = request.json
     img = content['image_base64']
     result = convert(img)

@@ -217,24 +217,22 @@ def bubbles_backend(result):
  probability_list = []  # probability_list = [[GROUP, PROBABILITY, [SUB]], [GROUP, PROBABILITY, [SUB]], [GROUP, PROBABILITY, [SUB]]]
 
  # This block of code will fill the probability list (above)
- for key in result['food'].keys():  # Running on all the outputs of Clarifai.    key = the specific food
-
+ for key in result.keys():  # Running on all the outputs of Clarifai.    key = the specific food
   group_found = False  # For each key
   for group in food_dict.keys():  # Running on all the food groups in the food dict
-
    if key in food_dict[group]:  # If the output from Clarifai in is this food group
     group_found = True  # Declares that a (level B) food group was found
     if add_to_probability_list(probability_list, group, key,
-                               result['food'][key]):  # If the food group is already in the probability list
+     result[key]):  # If the food group is already in the probability list
      continue
     else:  # If the food group is not in the list
-     probability_list.append([group, result['food'][key], [key]])  # Add new element: GROUP = group,  SUB = [key]
+     probability_list.append([group, result[key], [key]])  # Add new element: GROUP = group,  SUB = [key]
 
   if not group_found:  # If a food group wasn't found for this specific food, make new group
-   if add_to_probability_list(probability_list, 'OTHER', key, result['food'][key]):
+   if add_to_probability_list(probability_list, 'OTHER', key, result[key]):
     continue
    else:
-    probability_list.append(['OTHER', result['food'][key], [key]])  # Add new element: GROUP = group,  SUB = [key]
+    probability_list.append(['OTHER', result[key], [key]])  # Add new element: GROUP = group,  SUB = [key]
 
  # This block of code will divide the probability sum by the num of items found in this group.
  main_list = []
@@ -244,7 +242,7 @@ def bubbles_backend(result):
   temp_dict = {}  # {name: <GROUP_NAME>, size: <PROBABILITY>, sub: [{name:<FOOD_NAME>, size: <PROBABILITY>}, {name:<FOOD_NAME>, size: <PROBABILITY>}, ...]}
   temp_sub_list = []  # [{name:<FOOD_NAME>, size: <PROBABILITY>}, {name:<FOOD_NAME>, size: <PROBABILITY>}, ...]
   for food in item[SUB_INDEX]:
-   temp_sub_list.append({'name': food, 'size': result['food'][food]})
+   temp_sub_list.append({'name': food, 'size': result[food]})
 
   temp_dict['name'] = item[GROUP_INDEX]
   temp_dict['size'] = float(item[PROBABILITY_INDEX]) / len(item[SUB_INDEX])
@@ -464,6 +462,7 @@ def imgfull():
     content = request.json
     img = content['image_base64']
     result = convert(img)
+    print(result)
     return bubbles_backend(result)
 
 @app.route('/recommendation/', methods=['GET', 'POST'])

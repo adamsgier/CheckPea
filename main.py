@@ -316,13 +316,13 @@ def cal(weight, activity):
 
 def protein(weight, recommendation_dict):
  if recommendation_dict['weight_gain'] is False and recommendation_dict['muscle_gain'] is False:
-  return pounds(weight) * 0.7
+  return weight * 0.7
 
  if recommendation_dict['weight_gain'] is True and recommendation_dict['muscle_gain'] is False:
-  return pounds(weight) * 1.5
+  return weight * 1.5
 
  if recommendation_dict['muscle'] is True:
-  return pounds(weight) * 2
+  return weight * 2
 
 
 def fiber(sex, age, calorie_intake):

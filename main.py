@@ -442,6 +442,45 @@ def recommendation(height, weight, activity, sex, age, recommendation_dict):
  return nutrient_dict
 
 
+def CompareNut(json,nutrient_dict):
+    GoodDict = {}
+    BadDict = {}
+    if json['Carbohydrate, by difference'] >= nutrient_dict['carbs'] * 7:
+        GoodDict['carbs'] = json['Carbohydrate, by difference'] - (nutrient_dict['carbs'] * 7)
+    else:
+        BadDict['carbs'] = (nutrient_dict['carbs'] * 7) - json['Carbohydrate, by difference']
+    if json['Carbohydrate, by difference'] >= nutrient_dict['carbs'] * 7:
+        GoodDict['carbs'] = json['Carbohydrate, by difference'] - (nutrient_dict['carbs'] * 7)
+    else:
+        BadDict['carbs'] = (nutrient_dict['carbs'] * 7) - json['Carbohydrate, by difference']
+    if json['Carbohydrate, by difference'] >= nutrient_dict['carbs'] * 7:
+        GoodDict['carbs'] = json['Carbohydrate, by difference'] - (nutrient_dict['carbs'] * 7)
+    else:
+        BadDict['carbs'] = (nutrient_dict['carbs'] * 7) - json['Carbohydrate, by difference']
+    if json['Carbohydrate, by difference'] >= nutrient_dict['carbs'] * 7:
+        GoodDict['carbs'] = json['Carbohydrate, by difference'] - (nutrient_dict['carbs'] * 7)
+    else:
+        BadDict['carbs'] = (nutrient_dict['carbs'] * 7) - json['Carbohydrate, by difference']
+    if json['Carbohydrate, by difference'] >= nutrient_dict['carbs'] * 7:
+        GoodDict['carbs'] = json['Carbohydrate, by difference'] - (nutrient_dict['carbs'] * 7)
+    else:
+        BadDict['carbs'] = (nutrient_dict['carbs'] * 7) - json['Carbohydrate, by difference']
+    if json['Carbohydrate, by difference'] >= nutrient_dict['carbs'] * 7:
+        GoodDict['carbs'] = json['Carbohydrate, by difference'] - (nutrient_dict['carbs'] * 7)
+    else:
+        BadDict['carbs'] = (nutrient_dict['carbs'] * 7) - json['Carbohydrate, by difference']
+    if json['Carbohydrate, by difference'] >= nutrient_dict['carbs'] * 7:
+        GoodDict['carbs'] = json['Carbohydrate, by difference'] - (nutrient_dict['carbs'] * 7)
+    else:
+        BadDict['carbs'] = (nutrient_dict['carbs'] * 7) - json['Carbohydrate, by difference']
+    if json['Carbohydrate, by difference'] >= nutrient_dict['carbs'] * 7:
+        GoodDict['carbs'] = json['Carbohydrate, by difference'] - (nutrient_dict['carbs'] * 7)
+    else:
+        BadDict['carbs'] = (nutrient_dict['carbs'] * 7) - json['Carbohydrate, by difference']
+
+
+
+
 app = Flask(__name__)
 CORS(app)
 

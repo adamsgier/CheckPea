@@ -180,6 +180,16 @@ food_dict = {
           'puff', 'ratatouille', 'ration', 'sage', 'saute', 'spatula', 'spork', 'supper', 'unleavened', 'cucurbitaceae']
 }
 
+pizzaSub = [
+    {"name": "Peperoni Pizza", 'size': 0.4},
+    {"name": "Margarita Pizza", 'size': 0.4},
+    {"name": "Olive Pizza", 'size': 0.4},
+    {"name": "Onion Pizza", 'size': 0.4},
+    {"name": "Mashroom Pizza", 'size': 0.4},
+    {"name": "Corn Pizza", 'size': 0.4},
+    {"name": "Pineapple Pizza", 'size': 0.4},
+    {"name": "Mozzarella Pizza", 'size': 0.4}
+]
 
 def add_to_probability_list(probability_list, food_group, food_to_append, food_probability):
  '''
@@ -204,54 +214,69 @@ def add_to_probability_list(probability_list, food_group, food_to_append, food_p
 
 
 def bubbles_backend(result):
- """
- This function will get the food suggestions from Clarifai ("result") and return a json in the form:
- {data: [
-     {name: <GROUP_NAME>, size: <PROBABILITY>, sub: [{name:<FOOD_NAME>, size: <PROBABILITY>}, {name:<FOOD_NAME>, size: <PROBABILITY>}, ...]},
-     {name: <GROUP_NAME>, size: <PROBABILITY>, sub: [{name:<FOOD_NAME>, size: <PROBABILITY>}, {name:<FOOD_NAME>, size: <PROBABILITY>}, ...]},
-     {name: <GROUP_NAME>, size: <PROBABILITY>, sub: [{name:<FOOD_NAME>, size: <PROBABILITY>}, {name:<FOOD_NAME>, size: <PROBABILITY>}, ...]},
-     ...
- ]}
- """
- group_found = False
- probability_list = []  # probability_list = [[GROUP, PROBABILITY, [SUB]], [GROUP, PROBABILITY, [SUB]], [GROUP, PROBABILITY, [SUB]]]
+    """
+    This function will get the food suggestions from Clarifai ("result") and return a json in the form:
+    {data: [
+        {name: <GROUP_NAME>, size: <PROBABILITY>, sub: [{name:<FOOD_NAME>, size: <PROBABILITY>}, {name:<FOOD_NAME>, size: <PROBABILITY>}, ...]},
+        {name: <GROUP_NAME>, size: <PROBABILITY>, sub: [{name:<FOOD_NAME>, size: <PROBABILITY>}, {name:<FOOD_NAME>, size: <PROBABILITY>}, ...]},
+        {name: <GROUP_NAME>, size: <PROBABILITY>, sub: [{name:<FOOD_NAME>, size: <PROBABILITY>}, {name:<FOOD_NAME>, size: <PROBABILITY>}, ...]},
+        ...
+    ]}
+    """
+    group_found = False
+    # probability_list = [[GROUP, PROBABILITY, [SUB]], [GROUP, PROBABILITY, [SUB]], [GROUP, PROBABILITY, [SUB]]]
+    probability_list = []
 
- # This block of code will fill the probability list (above)
- for key in result.keys():  # Running on all the outputs of Clarifai.    key = the specific food
-  group_found = False  # For each key
-  for group in food_dict.keys():  # Running on all the food groups in the food dict
-   if key in food_dict[group]:  # If the output from Clarifai in is this food group
-    group_found = True  # Declares that a (level B) food group was found
-    if add_to_probability_list(probability_list, group, key,
-     result[key]):  # If the food group is already in the probability list
-     continue
-    else:  # If the food group is not in the list
-     probability_list.append([group, result[key], [key]])  # Add new element: GROUP = group,  SUB = [key]
+    # This block of code will fill the probability list (above)
+    for key in result.keys():  # Running on all the outputs of Clarifai.    key = the specific food
+        group_found = False  # For each key
+        for group in food_dict.keys():  # Running on all the food groups in the food dict
+            # If the output from Clarifai in is this food group
+            if key in food_dict[group]:
+                # Declares that a (level B) food group was found
+                group_found = True
+                if add_to_probability_list(probability_list, group, key,
+                                           result[key]):  # If the food group is already in the probability list
+                    continue
+                else:  # If the food group is not in the list
+                    # Add new element: GROUP = group,  SUB = [key]
+                    probability_list.append([group, result[key], [key]])
 
-  if not group_found:  # If a food group wasn't found for this specific food, make new group
-   if add_to_probability_list(probability_list, 'OTHER', key, result[key]):
-    continue
-   else:
-    probability_list.append(['OTHER', result[key], [key]])  # Add new element: GROUP = group,  SUB = [key]
+        if not group_found:  # If a food group wasn't found for this specific food, make new group
+            if add_to_probability_list(probability_list, 'OTHER', key, result[key]):
+                continue
+            else:
+                # Add new element: GROUP = group,  SUB = [key]
+                probability_list.append(['OTHER', result[key], [key]])
 
- # This block of code will divide the probability sum by the num of items found in this group.
- main_list = []
- for item in probability_list:  # probability_list = [[GROUP, PROBABILITY, [SUB]], [GROUP, PROBABILITY, [SUB]], [GROUP, PROBABILITY, [SUB]]]
-  if item[GROUP_INDEX] == 'HIDE':
-   continue  # This is a special case, if the answer from Clarifai contains something from the group 'HIDE' (See food_dict to understand) then it shouldn't show (for now at least))
-  temp_dict = {}  # {name: <GROUP_NAME>, size: <PROBABILITY>, sub: [{name:<FOOD_NAME>, size: <PROBABILITY>}, {name:<FOOD_NAME>, size: <PROBABILITY>}, ...]}
-  temp_sub_list = []  # [{name:<FOOD_NAME>, size: <PROBABILITY>}, {name:<FOOD_NAME>, size: <PROBABILITY>}, ...]
-  for food in item[SUB_INDEX]:
-   temp_sub_list.append({'name': food, 'size': result[food]})
+    # This block of code will divide the probability sum by the num of items found in this group.
+    main_list = []
+    # probability_list = [[GROUP, PROBABILITY, [SUB]], [GROUP, PROBABILITY, [SUB]], [GROUP, PROBABILITY, [SUB]]]
+    for item in probability_list:
+        if item[GROUP_INDEX] == 'HIDE':
+            # This is a special case, if the answer from Clarifai contains something from the group 'HIDE' (See food_dict to understand) then it shouldn't show (for now at least))
+            continue
+        # {name: <GROUP_NAME>, size: <PROBABILITY>, sub: [{name:<FOOD_NAME>, size: <PROBABILITY>}, {name:<FOOD_NAME>, size: <PROBABILITY>}, ...]}
+        temp_dict = {}
+        # [{name:<FOOD_NAME>, size: <PROBABILITY>}, {name:<FOOD_NAME>, size: <PROBABILITY>}, ...]
+        temp_sub_list = []
+        for food in item[SUB_INDEX]:
+            if (food.lower() == "pizza"):
+                temp_sub_list.append(
+                    {'name': food, 'size': result[food], "sub": pizzaSub})
+            else:
+                temp_sub_list.append(
+                    {'name': food, 'size': result[food]})
 
-  temp_dict['name'] = item[GROUP_INDEX]
-  temp_dict['size'] = float(item[PROBABILITY_INDEX]) / len(item[SUB_INDEX])
-  temp_dict['sub'] = temp_sub_list
+        temp_dict['name'] = item[GROUP_INDEX]
+        temp_dict['size'] = float(
+            item[PROBABILITY_INDEX]) / len(item[SUB_INDEX])
+        temp_dict['sub'] = temp_sub_list
 
-  main_list.append(temp_dict)
+        main_list.append(temp_dict)
 
- main_dict = {'data': main_list}
- return json.dumps(main_dict)
+    main_dict = {'data': main_list}
+    return json.dumps(main_dict)
 
 
 # with open("C:/Users/adams/Downloads/Eq_it-na_pizza-margherita_sep2005_sml.jpg", "rb") as img_file:
@@ -449,34 +474,40 @@ def CompareNut(json,nutrient_dict):
         GoodDict['carbs'] = json['Carbohydrate, by difference'] - (nutrient_dict['carbs'] * 7)
     else:
         BadDict['carbs'] = (nutrient_dict['carbs'] * 7) - json['Carbohydrate, by difference']
-    if json['Carbohydrate, by difference'] >= nutrient_dict['carbs'] * 7:
-        GoodDict['carbs'] = json['Carbohydrate, by difference'] - (nutrient_dict['carbs'] * 7)
+    if json['Protein'] >= nutrient_dict['proteins'] * 7:
+        GoodDict['proteins'] = json['Protein'] - (nutrient_dict['proteins'] * 7)
     else:
-        BadDict['carbs'] = (nutrient_dict['carbs'] * 7) - json['Carbohydrate, by difference']
-    if json['Carbohydrate, by difference'] >= nutrient_dict['carbs'] * 7:
-        GoodDict['carbs'] = json['Carbohydrate, by difference'] - (nutrient_dict['carbs'] * 7)
+        BadDict['proteins'] = (nutrient_dict['proteins'] * 7) - json['Protein']
+    if json['Fiber, total dietary'] <= nutrient_dict['fibers'] * 7:
+        GoodDict['fibers'] = (nutrient_dict['fibers'] * 7) - json['Fiber, total dietary']
     else:
-        BadDict['carbs'] = (nutrient_dict['carbs'] * 7) - json['Carbohydrate, by difference']
-    if json['Carbohydrate, by difference'] >= nutrient_dict['carbs'] * 7:
-        GoodDict['carbs'] = json['Carbohydrate, by difference'] - (nutrient_dict['carbs'] * 7)
+        BadDict['fibers'] = json['Fiber, total dietary'] - (nutrient_dict['fibers'] * 7)
+    if json['Sugars, total including NLEA'] >= nutrient_dict['sugars'] * 7:
+        GoodDict['sugars'] = json['Sugars, total including NLEA'] - (nutrient_dict['sugars'] * 7)
     else:
-        BadDict['carbs'] = (nutrient_dict['carbs'] * 7) - json['Carbohydrate, by difference']
-    if json['Carbohydrate, by difference'] >= nutrient_dict['carbs'] * 7:
-        GoodDict['carbs'] = json['Carbohydrate, by difference'] - (nutrient_dict['carbs'] * 7)
+        BadDict['sugars'] = (nutrient_dict['sugars'] * 7) - json['Sugars, total including NLEA']
+    if json['Fatty acids, total saturated'] >= nutrient_dict['saturated_fats'] * 7:
+        GoodDict['saturated_fats'] = json['Fatty acids, total saturated'] - (nutrient_dict['saturated_fats'] * 7)
     else:
-        BadDict['carbs'] = (nutrient_dict['carbs'] * 7) - json['Carbohydrate, by difference']
-    if json['Carbohydrate, by difference'] >= nutrient_dict['carbs'] * 7:
-        GoodDict['carbs'] = json['Carbohydrate, by difference'] - (nutrient_dict['carbs'] * 7)
+        BadDict['saturated_fats'] = (nutrient_dict['saturated_fats'] * 7) - json['Fatty acids, total saturated']
+    if json['Total lipid (fat)'] >= nutrient_dict['total_lipids'] * 7:
+        GoodDict['total_lipids'] = json['Total lipid (fat)'] - (nutrient_dict['total_lipids'] * 7)
     else:
-        BadDict['carbs'] = (nutrient_dict['carbs'] * 7) - json['Carbohydrate, by difference']
-    if json['Carbohydrate, by difference'] >= nutrient_dict['carbs'] * 7:
-        GoodDict['carbs'] = json['Carbohydrate, by difference'] - (nutrient_dict['carbs'] * 7)
+        BadDict['total_lipids'] = (nutrient_dict['total_lipids'] * 7) - json['Total lipid (fat)']
+    if json['Fatty acids, total trans'] >= nutrient_dict['trans_fats'] * 7:
+        GoodDict['trans_fats'] = json['Fatty acids, total trans'] - (nutrient_dict['trans_fats'] * 7)
     else:
-        BadDict['carbs'] = (nutrient_dict['carbs'] * 7) - json['Carbohydrate, by difference']
-    if json['Carbohydrate, by difference'] >= nutrient_dict['carbs'] * 7:
-        GoodDict['carbs'] = json['Carbohydrate, by difference'] - (nutrient_dict['carbs'] * 7)
+        BadDict['trans_fats'] = (nutrient_dict['trans_fats'] * 7) - json['Fatty acids, total trans']
+    if json['Cholesterol'] >= nutrient_dict['cholesterol'] * 7:
+        GoodDict['cholesterol'] = json['Cholesterol'] - (nutrient_dict['cholesterol'] * 7)
     else:
-        BadDict['carbs'] = (nutrient_dict['carbs'] * 7) - json['Carbohydrate, by difference']
+        BadDict['cholesterol'] = (nutrient_dict['cholesterol'] * 7) - json['Cholesterol']
+    if json['Sodium, Na'] >= nutrient_dict['sodium'] * 7:
+        GoodDict['sodium'] = json['Sodium, Na'] - (nutrient_dict['sodium'] * 7)
+    else:
+        BadDict['sodium'] = (nutrient_dict['sodium'] * 7) - json['Sodium, Na']
+    return {GoodDict, BadDict}
+
 
 
 

@@ -528,6 +528,7 @@ def imgfull():
     content = request.json
     img = content['image_base64']
     result = convert(img)
+    result['pizza'] = 0.9896452903747559
     print(result)
     return bubbles_backend(result)
 

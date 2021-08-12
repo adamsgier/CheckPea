@@ -183,7 +183,7 @@ food_dict = {
 pizzaSub = [
     {"name": "Margarita Pizza", 'size': 0.6},
     {"name": "Olive Pizza", 'size': 0.6},
-    {"name": "Mashroom Pizza", 'size': 0.6},
+    {"name": "Mushroom Pizza", 'size': 0.6},
     {"name": "Corn Pizza", 'size': 0.6}
 ]
 

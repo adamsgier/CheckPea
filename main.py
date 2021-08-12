@@ -181,14 +181,10 @@ food_dict = {
 }
 
 pizzaSub = [
-    {"name": "Peperoni Pizza", 'size': 0.4},
-    {"name": "Margarita Pizza", 'size': 0.4},
-    {"name": "Olive Pizza", 'size': 0.4},
-    {"name": "Onion Pizza", 'size': 0.4},
-    {"name": "Mashroom Pizza", 'size': 0.4},
-    {"name": "Corn Pizza", 'size': 0.4},
-    {"name": "Pineapple Pizza", 'size': 0.4},
-    {"name": "Mozzarella Pizza", 'size': 0.4}
+    {"name": "Margarita Pizza", 'size': 0.6},
+    {"name": "Olive Pizza", 'size': 0.6},
+    {"name": "Mashroom Pizza", 'size': 0.6},
+    {"name": "Corn Pizza", 'size': 0.6}
 ]
 
 def add_to_probability_list(probability_list, food_group, food_to_append, food_probability):

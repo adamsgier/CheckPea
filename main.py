@@ -292,7 +292,7 @@ def convert(my_string):
 
     # print(file_bytes)
     print(1)
-    metadata = (('authorization', 'Key c8891da1d32a44f0b6af0b7133996c9b'),)
+    metadata = (('authorization', 'Key '),)
     post_model_outputs_response = stub.PostModelOutputs(
         service_pb2.PostModelOutputsRequest(
             model_id="bd367be194cf45149e75f01d59f77ba7",

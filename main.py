@@ -13,6 +13,11 @@ from clarifai_grpc.grpc.api.status import status_code_pb2
 import base64
 from flask_cors import CORS
 import json
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 GROUP_INDEX = 0
 PROBABILITY_INDEX = 1
@@ -291,8 +296,8 @@ def convert(my_string):
         file_bytes = f.read()
 
     # print(file_bytes)
-    print(1)
-    metadata = (('authorization', 'Key '),)
+    api_key = os.getenv('CLARIFAI_API_KEY', 'YOUR_API_KEY_HERE')
+    metadata = (('authorization', f'Key {api_key}'),)
     post_model_outputs_response = stub.PostModelOutputs(
         service_pb2.PostModelOutputsRequest(
             model_id="bd367be194cf45149e75f01d59f77ba7",

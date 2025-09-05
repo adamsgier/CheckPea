@@ -61,9 +61,13 @@ The application calculates personalized nutritional recommendations based on:
 
 3. **Configure Clarifai API**
    - Get your API key from [Clarifai](https://clarifai.com/)
-   - Update the API key in `main.py` (line 281):
-   ```python
-   metadata = (('authorization', 'Key YOUR_API_KEY_HERE'),)
+   - Copy `.env.example` to `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+   - Edit `.env` and add your actual API key:
+   ```
+   CLARIFAI_API_KEY=your_actual_clarifai_api_key_here
    ```
 
 4. **Run the application**
@@ -173,6 +177,36 @@ CheckPea/
 ## 📝 License
 
 This project is available for educational and research purposes.
+
+## 🔒 Security
+
+**Important Security Notice**: This repository previously contained hardcoded API keys in the source code. We have implemented the following security measures:
+
+### Current Security Features
+- API keys are now loaded from environment variables using `python-dotenv`
+- `.env` file is included in `.gitignore` to prevent accidental commits
+- Sensitive configuration is separated from source code
+
+### If You Cloned the Repository Before the Security Fix
+If you cloned this repository before we implemented environment variable security, please follow these steps:
+
+1. **Remove API key from git history** (choose one method):
+   ```bash
+   # Modern approach (recommended)
+   ./remove_api_key_modern.sh
+   
+   # Traditional approach
+   ./remove_api_key.sh
+   ```
+
+2. **Generate a new API key** from your Clarifai dashboard (invalidate the old one)
+
+3. **Set up environment variables** as described in the installation section
+
+### For Contributors
+- Never commit API keys, passwords, or other sensitive data
+- Always use environment variables for configuration
+- Review your commits before pushing to ensure no sensitive data is included
 
 ## ⚠️ Important Notes
 
